@@ -22,12 +22,13 @@ let count_if_alive b x y size =
   | _ -> 0
 ;;
 
-let get_neighbours x y =
+(* neighbours of cell (x, y)*)
+let get_neighbours_coordinates x y =
   [ x - 1, y - 1
   ; x, y - 1
   ; x + 1, y - 1
   ; x - 1, y
-  ; (*(x, y);*)
+  ; (* for cell(x, y);*)
     x + 1, y
   ; x - 1, y + 1
   ; x, y + 1
@@ -35,26 +36,23 @@ let get_neighbours x y =
   ]
 ;;
 
-let count_alive_neighbours b x y size =
+let count_alive_neighbours b i size =
+  let x, y = get_position i size in
   let rec count_alive_neighbours_aux acc b lst size =
     match lst with
     | [] -> acc
     | (x, y) :: tl ->
       count_alive_neighbours_aux (acc + count_if_alive b x y size) b tl size
   in
-  count_alive_neighbours_aux 0 b (get_neighbours x y) size
+  count_alive_neighbours_aux 0 b (get_neighbours_coordinates x y) size
 ;;
 
-let count_neighbours b i size =
-  let x, y = get_position i size in
-  count_alive_neighbours b x y size
-;;
 
 (* form a board containing count of neighbour cells alive *)
 let form_count_board b size =
   let n = Array.make (size * size) 0 in
   for i = 0 to (size * size) - 1 do
-    n.(i) <- count_neighbours b i size
+    n.(i) <- count_alive_neighbours b i size
   done;
   n
 ;;

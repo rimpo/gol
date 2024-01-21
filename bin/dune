@@ -1,5 +1,5 @@
 (executable
  (public_name gol)
  (name main)
- (libraries board raylib raygui)
+ (libraries board raylib)
  (modes byte exe))
