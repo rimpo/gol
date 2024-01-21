@@ -87,10 +87,20 @@ let rec mark_alive b size lst =
 (* form list of cells which will be marked alive. It is going to be middle row of the table
    example for size=8 output list = [24; 25; 26; 27; 28; 29; 30; 31];
 *)
-let form_list size =
+let form_list_row size =
   let l = ref [] in
   for i = size / 2 * size to (size / 2 * size) + size - 1 do
     l := i :: !l
   done;
   !l
 ;;
+
+
+let form_list_col size =
+  let l = ref [] in
+  for i = 0 to size-1 do
+    l := (size/2 + (i * size)) :: !l
+  done;
+  !l
+;;
+

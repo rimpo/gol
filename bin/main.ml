@@ -15,10 +15,11 @@ let colors v =
 ;;
 
 let setup size =
-  Raylib.init_window ((size * cell_width) + 80) ((size * cell_width) + 80) "game of life";
-  Raylib.set_target_fps 30;
+  Raylib.init_window (size * cell_width) (size * cell_width) "game of life";
+  Raylib.set_target_fps 10;
   let b = Array.make (size * size) Dead in
-  mark_alive b size (form_list size);
+  mark_alive b size (form_list_row size);
+  mark_alive b size (form_list_col size);
   b
 ;;
 
@@ -32,8 +33,8 @@ let rec loop b size =
     for i = 0 to (size * size) - 1 do
       let x, y = get_position i size in
       draw_rectangle
-        ((x * cell_width) + 50)
-        ((y * cell_width) + 50)
+        (x * cell_width)
+        (y * cell_width)
         cell_width
         cell_width
         (colors b.(i))
