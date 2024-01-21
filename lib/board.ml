@@ -2,8 +2,9 @@ type status =
   | Dead
   | Alive
 
-(* type position = int * int *)
-
+(* get_index converts from (x,y) to index
+   example: (0, 1) -> 5  when size = 5
+*)
 let get_index pos size = (snd pos * size) + fst pos
 let get_position idx size = idx mod size, idx / size
 
@@ -21,7 +22,7 @@ let count_if_alive b x y size =
   | _ -> 0
 ;;
 
-let get_position_coordinate x y =
+let get_neighbours x y =
   [ x - 1, y - 1
   ; x, y - 1
   ; x + 1, y - 1
@@ -34,23 +35,23 @@ let get_position_coordinate x y =
   ]
 ;;
 
-let count_neighbours_cell b x y size =
-  let rec count_neighbours_cell_aux acc b lst size =
+let count_alive_neighbours b x y size =
+  let rec count_alive_neighbours_aux acc b lst size =
     match lst with
     | [] -> acc
     | (x, y) :: tl ->
-      count_neighbours_cell_aux (acc + count_if_alive b x y size) b tl size
+      count_alive_neighbours_aux (acc + count_if_alive b x y size) b tl size
   in
-  count_neighbours_cell_aux 0 b (get_position_coordinate x y) size
+  count_alive_neighbours_aux 0 b (get_neighbours x y) size
 ;;
 
 let count_neighbours b i size =
   let x, y = get_position i size in
-  count_neighbours_cell b x y size
+  count_alive_neighbours b x y size
 ;;
 
-(* count the neighbours each cell has. edges and corners will have less neighbours *)
-let neighbours b size =
+(* form a board containing count of neighbour cells alive *)
+let form_count_board b size =
   let n = Array.make (size * size) 0 in
   for i = 0 to (size * size) - 1 do
     n.(i) <- count_neighbours b i size
@@ -67,13 +68,15 @@ let evolve n b i =
      | _ -> Dead)
 ;;
 
+(* next stage based on the cell evolution *)
 let next b size =
-  let n = neighbours b size in
+  let n = form_count_board b size in
   for i = 0 to (size * size) - 1 do
     b.(i) <- evolve n b i
   done
 ;;
 
+(* marking board with alive based on index in list *)
 let rec mark_alive b size lst =
   match lst with
   | [] -> ()
