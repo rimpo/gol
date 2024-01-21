@@ -14,10 +14,8 @@ let is_alive idx b =
       | Alive -> true
       | Dead -> false
 
-(*let is_position_alive pos b =  is_alive (get_index pos) b*)
 
 (* count for each cell which are alive *)
-
 let count_if_alive b x y size = 
   let i = get_index (x, y) size in
     match i with
@@ -66,4 +64,15 @@ let next b size =
 let rec mark_alive b size lst = 
   match lst with
     | [] -> ()
-    | h :: t -> b.(h) <- Alive; mark_alive b size t;
+    | h :: t -> b.(h) <- Alive; mark_alive b size t
+;;
+
+(* form list of cells which will be marked alive. It is going to be middle row of the table 
+  example for size=8 output list = [24; 25; 26; 27; 28; 29; 30; 31];
+*)
+let form_list size =
+  let l = ref [] in
+    for i = ((size / 2) * size) to ((size / 2) * size + size)-1 do
+      l := i :: !l;
+    done;
+  !l
