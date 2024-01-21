@@ -59,6 +59,7 @@ let form_count_board b size =
   n
 ;;
 
+(* evolve based on conditions of neighbour *)
 let evolve n b i =
   match b.(i) with
   | Dead -> if n.(i) = 3 then Alive else Dead

@@ -1,3 +1,6 @@
-gol - Game of life in Ocaml
+# gol - Game of life written in Ocaml
 
 
+## Demo  
+
+![gif](./docs/gol.gif)

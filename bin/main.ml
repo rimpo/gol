@@ -1,3 +1,5 @@
+[@@@ocaml.warning "-32"]
+
 open Board
 
 (* cell width is used to draw the size of each cell *)
@@ -8,13 +10,13 @@ let size = 256
 
 let colors v =
   match v with
-  | Dead -> Raylib.Color.gray
+  | Dead -> Raylib.Color.black
   | Alive -> Raylib.Color.red
 ;;
 
 let setup size =
   Raylib.init_window ((size * cell_width) + 80) ((size * cell_width) + 80) "game of life";
-  Raylib.set_target_fps 10;
+  Raylib.set_target_fps 30;
   let b = Array.make (size * size) Dead in
   mark_alive b size (form_list size);
   b
